@@ -1,0 +1,68 @@
+pip install tensorflow tensorflow_hub matplotlib opencv-python
+
+from google.colab import files uploaded = files.upload()
+
+import tensorflow as tf
+
+def load_image(img_path, max_dim=512):
+
+img = tf.io.read_file(img_path)
+
+img = tf.image.decode_image(img, channels=3)
+
+img =
+
+Stf.image.convert_image_dtype(img, tf.float32)
+
+shape = tf.cast(tf.shape(img)[:-1], tf.float32)
+
+long_dim = max(shape)
+
+scale = max_dim / long_dim
+
+new_shape = tf.cast(shape * scale, tf.int32)
+
+img = tf.image.resize(img, new_shape)
+
+img = img[tf.newaxis, :] # Add batch
+
+dimension
+
+return img
+file_names = list(uploaded.keys()) print("Uploaded files:", file_names)
+
+
+content_image =
+
+load_image(file_names[0])
+
+style_image = load_image(file_names[1])
+import tensorflow_hub as hub
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import cv2
+
+model = hub.load('https://tfhub.dev /google/magenta/arbitrary-image -stylization-v1-256/2')
+
+stylized_image = model(tf.constant(content_image), tf.constant(style_image))[0]
+
+plt.imshow(np.squeeze(stylized_image))
+
+plt.title("Stylized Image")
+
+plt.axis('off')
+
+plt.show()
+
+result = np.squeeze(stylized_image) * 255
+
+result = result.astype(np.uint8)
+
+result = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
+
+cv2.imwrite('stylized_result.jpg', result)
+
+# Download it from google.colab import files files.download('stylized_result.jpg')
